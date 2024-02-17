@@ -1,4 +1,4 @@
-import todosRouter from "./routes/todo-route.js";
+import todosRouter from "./routes/todo-route";
 import morgan from "morgan";
 import express from "express";
 import cors from "cors";

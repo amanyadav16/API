@@ -1,16 +1,17 @@
 import { v4 as uuidv4 } from "uuid";
-import Todo from "../models/todo.js";
+import Todo from "../models/todo";
+import { Request, Response } from 'express';
 
-export const getTodos = async (req, res) => {
+export const getTodos = async (req: Request, res: Response) => {
   try {
     const todos = await Todo.find();
-    res.json(todos);
-  } catch (err) {
+    res.send(todos);
+  } catch (err:any) {
     res.status(500).json({ message: err.message });
   }
 };
 
-export const addTodo = async (req, res) => {
+export const addTodo = async (req :Request, res: Response) => {
   const uuid = uuidv4();
 
   const todo = new Todo({
@@ -24,12 +25,12 @@ export const addTodo = async (req, res) => {
   try {
     const newTodo = await todo.save();
     res.status(201).json(newTodo);
-  } catch (err) {
+  } catch (err:any) {
     res.status(400).json({ message: err.message });
   }
 };
 
-export const updateTodo = async (req, res) => {
+export const updateTodo = async (req: Request, res: Response) => {
   try {
     const todo = await Todo.findOne({ todoId: req.params.todoId });
 
@@ -43,7 +44,7 @@ export const updateTodo = async (req, res) => {
           completedTime: Date.now().toString(),
         };
 
-    const updatedTodo = await Todo.findByIdAndUpdate(todo.id, updatedFields, {
+    const updatedTodo = await Todo.findByIdAndUpdate(todo?.id, updatedFields, {
       new: true,
     });
 
@@ -52,18 +53,18 @@ export const updateTodo = async (req, res) => {
     }
 
     res.json(updatedTodo);
-  } catch (err) {
+  } catch (err:any) {
     res.status(400).json({ message: err.message });
   }
 };
 
-export const deleteTodo = async (req, res) => {
+export const deleteTodo = async (req: Request, res: Response) => {
   try {
     const deleteLog = await Todo.deleteOne({
       todoId: req.params.todoId,
     });
     res.json({ message: "Record deleted successfully", result: deleteLog });
-  } catch (err) {
+  } catch (err:any) {
     res.status(500).json({ message: err.message });
   }
 };
